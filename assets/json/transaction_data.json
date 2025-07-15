@@ -1,0 +1,502 @@
+[
+  {
+    "id": "txn_002",
+    "title": "Salary Payment",
+    "description": "Monthly salary deposit",
+    "amount": 4500.00,
+    "date": "2025-07-01T09:00:00Z",
+    "type": "income",
+    "category": "Salary",
+    "merchant": "TechCorp Inc"
+  },
+  {
+    "id": "txn_003",
+    "title": "Coffee Purchase",
+    "description": "Morning coffee and pastry",
+    "amount": 12.50,
+    "date": "2025-07-15T08:15:00Z",
+    "type": "expense",
+    "category": "Food & Dining",
+    "merchant": "Bean There Coffee"
+  },
+  {
+    "id": "txn_004",
+    "title": "Fuel Purchase",
+    "description": "Gas station fill-up",
+    "amount": 78.90,
+    "date": "2025-07-13T16:45:00Z",
+    "type": "expense",
+    "category": "Transportation",
+    "merchant": "Shell Gas Station"
+  },
+  {
+    "id": "txn_005",
+    "title": "Online Course",
+    "description": "Flutter development course subscription",
+    "amount": 89.99,
+    "date": "2025-07-10T14:20:00Z",
+    "type": "expense",
+    "category": "Education",
+    "merchant": "LearnTech Academy"
+  },
+  {
+    "id": "txn_006",
+    "title": "Freelance Payment",
+    "description": "Mobile app development project",
+    "amount": 850.00,
+    "date": "2025-07-08T11:30:00Z",
+    "type": "income",
+    "category": "Freelance",
+    "merchant": "Digital Solutions Ltd"
+  },
+  {
+    "id": "txn_007",
+    "title": "Netflix Subscription",
+    "description": "Monthly streaming service",
+    "amount": 15.99,
+    "date": "2025-07-05T00:05:00Z",
+    "type": "expense",
+    "category": "Entertainment",
+    "merchant": "Netflix"
+  },
+  {
+    "id": "txn_008",
+    "title": "Pharmacy",
+    "description": "Prescription medication",
+    "amount": 35.75,
+    "date": "2025-07-12T13:20:00Z",
+    "type": "expense",
+    "category": "Healthcare",
+    "merchant": "MedPlus Pharmacy"
+  },
+  {
+    "id": "txn_009",
+    "title": "Book Purchase",
+    "description": "Programming books from online store",
+    "amount": 67.45,
+    "date": "2025-07-09T19:30:00Z",
+    "type": "expense",
+    "category": "Education",
+    "merchant": "Amazon"
+  },
+  {
+    "id": "txn_010",
+    "title": "Rent Payment",
+    "description": "Monthly apartment rent",
+    "amount": 1200.00,
+    "date": "2025-07-01T10:00:00Z",
+    "type": "expense",
+    "category": "Housing",
+    "merchant": "PropertyMax Rentals"
+  },
+  {
+    "id": "txn_011",
+    "title": "Uber Ride",
+    "description": "Ride to downtown office",
+    "amount": 18.75,
+    "date": "2025-07-14T09:15:00Z",
+    "type": "expense",
+    "category": "Transportation",
+    "merchant": "Uber"
+  },
+  {
+    "id": "txn_012",
+    "title": "Dividend Payment",
+    "description": "Quarterly dividend from stocks",
+    "amount": 125.30,
+    "date": "2025-07-03T12:00:00Z",
+    "type": "income",
+    "category": "Investment",
+    "merchant": "Zerodha Securities"
+  },
+  {
+    "id": "txn_013",
+    "title": "Restaurant Dinner",
+    "description": "Anniversary dinner with spouse",
+    "amount": 95.80,
+    "date": "2025-07-11T20:00:00Z",
+    "type": "expense",
+    "category": "Food & Dining",
+    "merchant": "The Spice Route"
+  },
+  {
+    "id": "txn_014",
+    "title": "Gym Membership",
+    "description": "Monthly fitness center membership",
+    "amount": 45.00,
+    "date": "2025-07-02T07:30:00Z",
+    "type": "expense",
+    "category": "Health & Fitness",
+    "merchant": "FitLife Gym"
+  },
+  {
+    "id": "txn_015",
+    "title": "Mobile Recharge",
+    "description": "Prepaid mobile plan top-up",
+    "amount": 25.00,
+    "date": "2025-07-06T15:45:00Z",
+    "type": "expense",
+    "category": "Utilities",
+    "merchant": "Airtel"
+  },
+  {
+    "id": "txn_016",
+    "title": "Consulting Fee",
+    "description": "IT consulting project payment",
+    "amount": 1250.00,
+    "date": "2025-07-07T16:00:00Z",
+    "type": "income",
+    "category": "Freelance",
+    "merchant": "StartupHub"
+  },
+  {
+    "id": "txn_017",
+    "title": "Electricity Bill",
+    "description": "Monthly electricity consumption",
+    "amount": 78.50,
+    "date": "2025-07-04T11:30:00Z",
+    "type": "expense",
+    "category": "Utilities",
+    "merchant": "Chennai Electric Board"
+  },
+  {
+    "id": "txn_018",
+    "title": "ATM Withdrawal",
+    "description": "Cash withdrawal for daily expenses",
+    "amount": 200.00,
+    "date": "2025-07-13T14:20:00Z",
+    "type": "expense",
+    "category": "Cash",
+    "merchant": "HDFC Bank ATM"
+  },
+  {
+    "id": "txn_019",
+    "title": "Online Shopping",
+    "description": "Electronics and accessories",
+    "amount": 234.99,
+    "date": "2025-07-08T22:15:00Z",
+    "type": "expense",
+    "category": "Shopping",
+    "merchant": "Flipkart"
+  },
+  {
+    "id": "txn_020",
+    "title": "Interest Credit",
+    "description": "Savings account interest",
+    "amount": 18.75,
+    "date": "2025-07-01T00:01:00Z",
+    "type": "income",
+    "category": "Interest",
+    "merchant": "ICICI Bank"
+  },
+  {
+    "id": "txn_021",
+    "title": "Movie Tickets",
+    "description": "Weekend movie with friends",
+    "amount": 32.50,
+    "date": "2025-07-12T18:30:00Z",
+    "type": "expense",
+    "category": "Entertainment",
+    "merchant": "PVR Cinemas"
+  },
+  {
+    "id": "txn_022",
+    "title": "Clothing Purchase",
+    "description": "Formal shirts for office",
+    "amount": 189.99,
+    "date": "2025-07-10T16:45:00Z",
+    "type": "expense",
+    "category": "Shopping",
+    "merchant": "Van Heusen"
+  },
+  {
+    "id": "txn_023",
+    "title": "Internet Bill",
+    "description": "Monthly broadband subscription",
+    "amount": 55.00,
+    "date": "2025-07-05T10:15:00Z",
+    "type": "expense",
+    "category": "Utilities",
+    "merchant": "Jio Fiber"
+  },
+  {
+    "id": "txn_024",
+    "title": "Bonus Payment",
+    "description": "Performance bonus from company",
+    "amount": 750.00,
+    "date": "2025-07-15T14:00:00Z",
+    "type": "income",
+    "category": "Bonus",
+    "merchant": "TechCorp Inc"
+  },
+  {
+    "id": "txn_025",
+    "title": "Medical Checkup",
+    "description": "Annual health screening",
+    "amount": 150.00,
+    "date": "2025-07-09T10:30:00Z",
+    "type": "expense",
+    "category": "Healthcare",
+    "merchant": "Apollo Hospital"
+  },
+  {
+    "id": "txn_026",
+    "title": "Spotify Premium",
+    "description": "Music streaming subscription",
+    "amount": 9.99,
+    "date": "2025-07-07T00:02:00Z",
+    "type": "expense",
+    "category": "Entertainment",
+    "merchant": "Spotify"
+  },
+  {
+    "id": "txn_001",
+    "title": "Grocery Shopping",
+    "description": "Weekly grocery shopping at supermarket",
+    "amount": 145.67,
+    "date": "2025-07-14T10:30:00Z",
+    "type": "expense",
+    "category": "Food & Dining",
+    "merchant": "FreshMart Supermarket"
+  },
+  {
+    "id": "txn_027",
+    "title": "Taxi Fare",
+    "description": "Airport pickup service",
+    "amount": 45.60,
+    "date": "2025-07-11T06:30:00Z",
+    "type": "expense",
+    "category": "Transportation",
+    "merchant": "Ola Cabs"
+  },
+  {
+    "id": "txn_028",
+    "title": "Investment Return",
+    "description": "Mutual fund redemption",
+    "amount": 320.45,
+    "date": "2025-07-06T13:45:00Z",
+    "type": "income",
+    "category": "Investment",
+    "merchant": "SBI Mutual Fund"
+  },
+  {
+    "id": "txn_029",
+    "title": "Fast Food",
+    "description": "Quick lunch during work",
+    "amount": 8.75,
+    "date": "2025-07-14T12:45:00Z",
+    "type": "expense",
+    "category": "Food & Dining",
+    "merchant": "McDonald's"
+  },
+  {
+    "id": "txn_030",
+    "title": "Home Insurance",
+    "description": "Annual home insurance premium",
+    "amount": 180.00,
+    "date": "2025-07-03T15:20:00Z",
+    "type": "expense",
+    "category": "Insurance",
+    "merchant": "LIC Insurance"
+  },
+  {
+    "id": "txn_031",
+    "title": "Stationery Purchase",
+    "description": "Office supplies and notebooks",
+    "amount": 42.30,
+    "date": "2025-07-10T11:15:00Z",
+    "type": "expense",
+    "category": "Office Supplies",
+    "merchant": "Staples"
+  },
+  {
+    "id": "txn_032",
+    "title": "Refund Credit",
+    "description": "Product return refund",
+    "amount": 67.99,
+    "date": "2025-07-08T14:30:00Z",
+    "type": "income",
+    "category": "Refund",
+    "merchant": "Amazon"
+  },
+  {
+    "id": "txn_033",
+    "title": "Car Wash",
+    "description": "Professional car cleaning service",
+    "amount": 15.00,
+    "date": "2025-07-13T11:00:00Z",
+    "type": "expense",
+    "category": "Car Maintenance",
+    "merchant": "Sparkle Car Wash"
+  },
+  {
+    "id": "txn_034",
+    "title": "Charitable Donation",
+    "description": "Monthly donation to NGO",
+    "amount": 100.00,
+    "date": "2025-07-01T17:30:00Z",
+    "type": "expense",
+    "category": "Charity",
+    "merchant": "Smile Foundation"
+  },
+  {
+    "id": "txn_035",
+    "title": "Parking Fee",
+    "description": "Mall parking charges",
+    "amount": 5.50,
+    "date": "2025-07-12T15:45:00Z",
+    "type": "expense",
+    "category": "Transportation",
+    "merchant": "Express Mall"
+  },
+  {
+    "id": "txn_036",
+    "title": "Cashback Reward",
+    "description": "Credit card cashback",
+    "amount": 23.45,
+    "date": "2025-07-04T12:00:00Z",
+    "type": "income",
+    "category": "Cashback",
+    "merchant": "HDFC Bank"
+  },
+  {
+    "id": "txn_037",
+    "title": "Pizza Delivery",
+    "description": "Friday night dinner order",
+    "amount": 28.90,
+    "date": "2025-07-11T19:30:00Z",
+    "type": "expense",
+    "category": "Food & Dining",
+    "merchant": "Domino's Pizza"
+  },
+  {
+    "id": "txn_038",
+    "title": "Software License",
+    "description": "Annual IDE subscription",
+    "amount": 199.00,
+    "date": "2025-07-09T13:15:00Z",
+    "type": "expense",
+    "category": "Software",
+    "merchant": "JetBrains"
+  },
+  {
+    "id": "txn_039",
+    "title": "Bus Ticket",
+    "description": "Inter-city travel ticket",
+    "amount": 35.00,
+    "date": "2025-07-07T08:00:00Z",
+    "type": "expense",
+    "category": "Transportation",
+    "merchant": "RedBus"
+  },
+  {
+    "id": "txn_040",
+    "title": "Rental Income",
+    "description": "Monthly property rent received",
+    "amount": 800.00,
+    "date": "2025-07-02T10:30:00Z",
+    "type": "income",
+    "category": "Rental",
+    "merchant": "Property Tenant"
+  },
+  {
+    "id": "txn_041",
+    "title": "Hair Salon",
+    "description": "Monthly haircut and styling",
+    "amount": 25.00,
+    "date": "2025-07-14T16:00:00Z",
+    "type": "expense",
+    "category": "Personal Care",
+    "merchant": "StyleCut Salon"
+  },
+  {
+    "id": "txn_042",
+    "title": "Cloud Storage",
+    "description": "Monthly cloud backup service",
+    "amount": 4.99,
+    "date": "2025-07-06T00:03:00Z",
+    "type": "expense",
+    "category": "Software",
+    "merchant": "Google Drive"
+  },
+  {
+    "id": "txn_043",
+    "title": "Vegetables Market",
+    "description": "Fresh vegetables and fruits",
+    "amount": 32.80,
+    "date": "2025-07-13T09:30:00Z",
+    "type": "expense",
+    "category": "Food & Dining",
+    "merchant": "Local Vegetable Market"
+  },
+  {
+    "id": "txn_044",
+    "title": "Survey Reward",
+    "description": "Online survey completion payment",
+    "amount": 12.00,
+    "date": "2025-07-05T20:15:00Z",
+    "type": "income",
+    "category": "Rewards",
+    "merchant": "Survey Monkey"
+  },
+  {
+    "id": "txn_045",
+    "title": "Pet Supplies",
+    "description": "Dog food and accessories",
+    "amount": 58.75,
+    "date": "2025-07-10T14:45:00Z",
+    "type": "expense",
+    "category": "Pet Care",
+    "merchant": "Pet Paradise"
+  },
+  {
+    "id": "txn_046",
+    "title": "Train Ticket",
+    "description": "Weekend trip to nearby city",
+    "amount": 22.50,
+    "date": "2025-07-12T07:15:00Z",
+    "type": "expense",
+    "category": "Transportation",
+    "merchant": "Indian Railways"
+  },
+  {
+    "id": "txn_047",
+    "title": "Gift Purchase",
+    "description": "Birthday gift for friend",
+    "amount": 85.00,
+    "date": "2025-07-08T17:30:00Z",
+    "type": "expense",
+    "category": "Gifts",
+    "merchant": "Gift Gallery"
+  },
+  {
+    "id": "txn_048",
+    "title": "Tutorial Payment",
+    "description": "Private tutoring session",
+    "amount": 40.00,
+    "date": "2025-07-07T15:00:00Z",
+    "type": "expense",
+    "category": "Education",
+    "merchant": "SkillShare Tutors"
+  },
+  {
+    "id": "txn_049",
+    "title": "Bank Transfer",
+    "description": "Money transfer to family",
+    "amount": 300.00,
+    "date": "2025-07-04T16:30:00Z",
+    "type": "expense",
+    "category": "Transfer",
+    "merchant": "Family Member"
+  },
+  {
+    "id": "txn_050",
+    "title": "Side Hustle",
+    "description": "Weekend photography gig",
+    "amount": 200.00,
+    "date": "2025-07-13T18:00:00Z",
+    "type": "income",
+    "category": "Freelance",
+    "merchant": "Wedding Photography"
+  }
+]
