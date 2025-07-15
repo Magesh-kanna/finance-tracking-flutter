@@ -109,7 +109,7 @@ class HomeScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFF667eea).withOpacity(0.4),
+                    color: Color(0xFF667eea).withOpacity(0.9),
                     blurRadius: 15,
                     offset: Offset(0, 5),
                   ),

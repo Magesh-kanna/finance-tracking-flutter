@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:paywize/src/common/utils/slide_animation.dart';
 import 'package:paywize/src/features/transaction/data/models/transaction_model.dart';
 import 'package:paywize/src/features/transaction/data/models/transaction_state.dart';
 import 'package:paywize/src/features/transaction/presentation/widgets/transaction_card.dart';
@@ -143,132 +144,139 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
                     child: Column(
                       children: [
                         // Summary Cards
-                        Container(
-                          padding: EdgeInsets.all(24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Financial Overview',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2D3748),
+                        SlideAnimation(
+                          child: Container(
+                            padding: EdgeInsets.all(24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Financial Overview',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2D3748),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 16),
-                              Row(
-                                children: [
-                                  _buildSummaryCard(
-                                    'Balance',
-                                    transactionListNotifier.totalBalance,
-                                    Icons.account_balance,
-                                    Color(0xFF667eea),
-                                  ),
-                                  SizedBox(width: 12),
-                                  _buildSummaryCard(
-                                    'Income',
-                                    transactionListNotifier.totalIncome,
-                                    Icons.trending_up,
-                                    Color(0xFF10B981),
-                                  ),
-                                  SizedBox(width: 12),
-                                  _buildSummaryCard(
-                                    'Expenses',
-                                    transactionListNotifier.totalExpenses,
-                                    Icons.trending_down,
-                                    Color(0xFFEF4444),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    _buildSummaryCard(
+                                      'Balance',
+                                      transactionListNotifier.totalBalance,
+                                      Icons.account_balance,
+                                      Color(0xFF667eea),
+                                    ),
+                                    SizedBox(width: 12),
+                                    _buildSummaryCard(
+                                      'Income',
+                                      transactionListNotifier.totalIncome,
+                                      Icons.trending_up,
+                                      Color(0xFF10B981),
+                                    ),
+                                    SizedBox(width: 12),
+                                    _buildSummaryCard(
+                                      'Expenses',
+                                      transactionListNotifier.totalExpenses,
+                                      Icons.trending_down,
+                                      Color(0xFFEF4444),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
 
                         // Filters Section
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Search & Filter test
-                              Text(
-                                'Search & Filter',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2D3748),
+                        SlideAnimation(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Search & Filter test
+                                Text(
+                                  'Search & Filter',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2D3748),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 16),
+                                SizedBox(height: 16),
 
-                              // Search Bar
-                              TextField(
-                                controller: _searchController,
-                                decoration: _inputDecoration(
-                                  'Search transactions...',
+                                // Search Bar
+                                TextField(
+                                  controller: _searchController,
+                                  decoration: _inputDecoration(
+                                    'Search transactions...',
+                                  ),
+                                  onChanged: (value) {
+                                    transactionListNotifier.search(value);
+                                  },
+                                  onSubmitted: (value) {
+                                    transactionListNotifier.search(value);
+                                  },
                                 ),
-                                onChanged: (value) {
-                                  transactionListNotifier.search(value);
-                                },
-                                onSubmitted: (value) {
-                                  transactionListNotifier.search(value);
-                                },
-                              ),
-                              SizedBox(height: 16),
+                                SizedBox(height: 16),
 
-                              // Filter Chips
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  spacing: 8,
-                                  children: [
-                                    TransactionFilterChip(
-                                      label:
-                                          'Category: ${transactionListValue?.selectedCategory}',
-                                      icon: Icons.category,
-                                      onTap: () => _showCategoryFilter(
-                                        transactionListValue,
-                                        transactionListNotifier,
+                                // Filter Chips
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    spacing: 8,
+                                    children: [
+                                      TransactionFilterChip(
+                                        label:
+                                            'Category: ${transactionListValue?.selectedCategory}',
+                                        icon: Icons.category,
+                                        onTap: () => _showCategoryFilter(
+                                          transactionListValue,
+                                          transactionListNotifier,
+                                        ),
                                       ),
-                                    ),
-                                    TransactionFilterChip(
-                                      label:
-                                          transactionListValue?.selectedType ==
-                                              null
-                                          ? 'Type: All'
-                                          : 'Type: ${transactionListValue?.selectedType.toString().split('.').last}',
-                                      icon: Icons.swap_horiz,
-                                      onTap: () => _showTypeFilter(
-                                        transactionListValue,
-                                        transactionListNotifier,
+                                      TransactionFilterChip(
+                                        label:
+                                            transactionListValue
+                                                    ?.selectedType ==
+                                                null
+                                            ? 'Type: All'
+                                            : 'Type: ${transactionListValue?.selectedType.toString().split('.').last}',
+                                        icon: Icons.swap_horiz,
+                                        onTap: () => _showTypeFilter(
+                                          transactionListValue,
+                                          transactionListNotifier,
+                                        ),
                                       ),
-                                    ),
-                                    TransactionFilterChip(
-                                      label:
+                                      TransactionFilterChip(
+                                        label:
+                                            transactionListValue
+                                                    ?.selectedDateRange ==
+                                                null
+                                            ? 'Date Range'
+                                            : 'Date: ${transactionListValue?.selectedDateRange!.start.day}/${transactionListValue?.selectedDateRange!.start.month} - ${transactionListValue?.selectedDateRange!.end.day}/${transactionListValue?.selectedDateRange!.end.month}',
+                                        icon: Icons.date_range,
+                                        onTap: () => _selectDateRange(
                                           transactionListValue
-                                                  ?.selectedDateRange ==
-                                              null
-                                          ? 'Date Range'
-                                          : 'Date: ${transactionListValue?.selectedDateRange!.start.day}/${transactionListValue?.selectedDateRange!.start.month} - ${transactionListValue?.selectedDateRange!.end.day}/${transactionListValue?.selectedDateRange!.end.month}',
-                                      icon: Icons.date_range,
-                                      onTap: () => _selectDateRange(
-                                        transactionListValue?.selectedDateRange,
+                                              ?.selectedDateRange,
+                                        ),
                                       ),
-                                    ),
-                                    TransactionFilterChip(
-                                      label: 'Clear',
-                                      icon: Icons.clear,
-                                      onTap: () {
-                                        _searchController.clear();
-                                        transactionListNotifier.clearFilters();
-                                      },
-                                      isAction: true,
-                                    ),
-                                  ],
+                                      TransactionFilterChip(
+                                        label: 'Clear',
+                                        icon: Icons.clear,
+                                        onTap: () {
+                                          _searchController.clear();
+                                          transactionListNotifier
+                                              .clearFilters();
+                                        },
+                                        isAction: true,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
 
@@ -302,28 +310,30 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
                                     ],
                                   ),
                                 )
-                              : RefreshIndicator(
-                                  onRefresh: () async =>
-                                      ref.invalidate(transactionListProvider),
-                                  color: Color(0xFF667eea),
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                    ),
-                                    itemCount:
-                                        (transactionListValue
-                                                    ?.filteredTransactions ??
-                                                [])
-                                            .length,
-                                    itemBuilder: (context, index) {
-                                      final transaction =
+                              : SlideAnimation(
+                                  child: RefreshIndicator(
+                                    onRefresh: () async =>
+                                        ref.invalidate(transactionListProvider),
+                                    color: Color(0xFF667eea),
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 24,
+                                      ),
+                                      itemCount:
                                           (transactionListValue
-                                              ?.filteredTransactions ??
-                                          [])[index];
-                                      return TransactionCard(
-                                        transaction: transaction,
-                                      );
-                                    },
+                                                      ?.filteredTransactions ??
+                                                  [])
+                                              .length,
+                                      itemBuilder: (context, index) {
+                                        final transaction =
+                                            (transactionListValue
+                                                ?.filteredTransactions ??
+                                            [])[index];
+                                        return TransactionCard(
+                                          transaction: transaction,
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                         ),
