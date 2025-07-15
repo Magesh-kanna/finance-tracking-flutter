@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:paywize/src/common/utils/slide_animation.dart';
 import 'package:paywize/src/features/transaction/data/models/transaction_model.dart';
 import 'package:paywize/src/features/transaction/presentation/widgets/transaction_action_buttons.dart';
 import 'package:paywize/src/features/transaction/presentation/widgets/transaction_amount_card.dart';
@@ -57,7 +58,11 @@ class _TransactionDetailPageState extends ConsumerState<TransactionDetailPage> {
                       child: Column(
                         children: [
                           // Transaction Amount Card
-                          TransactionAmountCard(transaction: transaction),
+                          SlideAnimation(
+                            child: TransactionAmountCard(
+                              transaction: transaction,
+                            ),
+                          ),
 
                           // Transaction Info Cards
                           Container(
@@ -77,64 +82,70 @@ class _TransactionDetailPageState extends ConsumerState<TransactionDetailPage> {
                                 SizedBox(height: 16),
 
                                 // Title & Description Card
-                                TransactionDetailInfoCard(
-                                  title: 'Transaction Details',
-                                  children: [
-                                    _buildInfoRow(
-                                      Icons.title,
-                                      'Title',
-                                      transaction.title,
-                                    ),
-                                    _buildInfoRow(
-                                      Icons.description,
-                                      'Description',
-                                      transaction.description,
-                                    ),
-                                  ],
+                                SlideAnimation(
+                                  child: TransactionDetailInfoCard(
+                                    title: 'Transaction Details',
+                                    children: [
+                                      _buildInfoRow(
+                                        Icons.title,
+                                        'Title',
+                                        transaction.title,
+                                      ),
+                                      _buildInfoRow(
+                                        Icons.description,
+                                        'Description',
+                                        transaction.description,
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
                                 SizedBox(height: 16),
 
                                 // Category & Merchant Card
-                                TransactionDetailInfoCard(
-                                  title: 'Business Information',
-                                  children: [
-                                    _buildInfoRow(
-                                      Icons.category,
-                                      'Category',
-                                      transaction.category,
-                                    ),
-                                    _buildInfoRow(
-                                      Icons.store,
-                                      'Merchant',
-                                      transaction.merchant,
-                                    ),
-                                  ],
+                                SlideAnimation(
+                                  child: TransactionDetailInfoCard(
+                                    title: 'Business Information',
+                                    children: [
+                                      _buildInfoRow(
+                                        Icons.category,
+                                        'Category',
+                                        transaction.category,
+                                      ),
+                                      _buildInfoRow(
+                                        Icons.store,
+                                        'Merchant',
+                                        transaction.merchant,
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
                                 SizedBox(height: 16),
 
                                 // Date & Time Card
-                                TransactionDetailInfoCard(
-                                  title: 'Date & Time',
-                                  children: [
-                                    _buildInfoRow(
-                                      Icons.calendar_today,
-                                      'Date',
-                                      '${transaction.date.day}/${transaction.date.month}/${transaction.date.year}',
-                                    ),
-                                    _buildInfoRow(
-                                      Icons.access_time,
-                                      'Time',
-                                      '${transaction.date.hour.toString().padLeft(2, '0')}:${transaction.date.minute.toString().padLeft(2, '0')}',
-                                    ),
-                                  ],
+                                SlideAnimation(
+                                  child: TransactionDetailInfoCard(
+                                    title: 'Date & Time',
+                                    children: [
+                                      _buildInfoRow(
+                                        Icons.calendar_today,
+                                        'Date',
+                                        '${transaction.date.day}/${transaction.date.month}/${transaction.date.year}',
+                                      ),
+                                      _buildInfoRow(
+                                        Icons.access_time,
+                                        'Time',
+                                        '${transaction.date.hour.toString().padLeft(2, '0')}:${transaction.date.minute.toString().padLeft(2, '0')}',
+                                      ),
+                                    ],
+                                  ),
                                 ),
 
                                 SizedBox(height: 24),
 
                                 // Action Buttons
-                                _buildActionButtons(),
+                                SlideAnimation(child: _buildActionButtons()),
 
                                 SizedBox(height: 24),
                               ],

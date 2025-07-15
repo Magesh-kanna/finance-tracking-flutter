@@ -131,7 +131,34 @@ class PayoutListScreen extends ConsumerWidget {
             );
           }
         },
-        error: (error, stackTrace) {},
+        error: (error, stackTrace) {
+          /// Empty and Error shares the same code - for development purpose
+          return Center(
+            child: SlideAnimation(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.payment_outlined, size: 80),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'No payouts found',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Your payout history will appear here',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Click the below plus button to create payouts',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
         loading: () {
           return Container(
             decoration: const BoxDecoration(

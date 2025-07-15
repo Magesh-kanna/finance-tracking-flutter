@@ -28,7 +28,7 @@ class TransactionList extends _$TransactionList {
   double get totalBalance {
     return (state.value?.filteredTransactions ?? []).fold(
       0.0,
-      (sum, transaction) => (sum ?? 0) + transaction.amount,
+      (sum, transaction) => sum + transaction.amount,
     );
   }
 
