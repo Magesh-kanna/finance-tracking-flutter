@@ -37,16 +37,16 @@ class TransactionCard extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: transaction.type == TransactionModelType.income
+              color: transaction.type == TransactionModelType.Income
                   ? Color(0xFF10B981).withOpacity(0.1)
                   : Color(0xFFEF4444).withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              transaction.type == TransactionModelType.income
+              transaction.type == TransactionModelType.Income
                   ? Icons.trending_up
                   : Icons.trending_down,
-              color: transaction.type == TransactionModelType.income
+              color: transaction.type == TransactionModelType.Income
                   ? Color(0xFF10B981)
                   : Color(0xFFEF4444),
             ),

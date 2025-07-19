@@ -27,12 +27,12 @@ class TransactionModel {
       amount: json['amount'].toDouble(),
       date: DateTime.parse(json['date']),
       type: json['type'] == 'income'
-          ? TransactionModelType.income
-          : TransactionModelType.expense,
+          ? TransactionModelType.Income
+          : TransactionModelType.Expense,
       category: json['category'],
       merchant: json['merchant'],
     );
   }
 }
 
-enum TransactionModelType { income, expense }
+enum TransactionModelType { All, Income, Expense }

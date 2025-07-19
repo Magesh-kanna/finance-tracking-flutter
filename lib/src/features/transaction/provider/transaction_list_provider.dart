@@ -22,6 +22,8 @@ class TransactionList extends _$TransactionList {
     return TransactionState(
       allTransactions: transactions,
       filteredTransactions: transactions,
+      selectedCategory: 'All', // Initialize with default value
+      selectedType: TransactionModelType.All,
     );
   }
 
@@ -34,13 +36,13 @@ class TransactionList extends _$TransactionList {
 
   double get totalIncome {
     return (state.value?.filteredTransactions ?? [])
-        .where((t) => t.type == TransactionModelType.income)
+        .where((t) => t.type == TransactionModelType.Income)
         .fold(0.0, (sum, transaction) => sum + transaction.amount);
   }
 
   double get totalExpenses {
     return (state.value?.filteredTransactions ?? [])
-        .where((t) => t.type == TransactionModelType.expense)
+        .where((t) => t.type == TransactionModelType.Expense)
         .fold(0.0, (sum, transaction) => sum + transaction.amount);
   }
 
@@ -82,6 +84,8 @@ class TransactionList extends _$TransactionList {
         selectedCategory: 'All',
         selectedType: null,
         selectedDateRange: null,
+        resetDateRange: true,
+        resetType: true,
         searchQuery: '',
       ),
     );
@@ -91,13 +95,11 @@ class TransactionList extends _$TransactionList {
   void applyFilters() {
     final current = state.value;
     if (current == null) return;
-    state = AsyncValue.data(
-      current.copyWith(searchQuery: state.value?.searchQuery ?? ''),
-    );
-    List<TransactionModel> filtered = state.value?.allTransactions ?? [];
+
+    List<TransactionModel> filtered = current.allTransactions ?? [];
 
     // Search
-    final query = state.value?.searchQuery.toLowerCase() ?? '';
+    final query = current.searchQuery.toLowerCase() ?? '';
     if (query != '') {
       filtered = filtered.where((tx) {
         return tx.title.toLowerCase().contains(query) ||
@@ -106,29 +108,41 @@ class TransactionList extends _$TransactionList {
       }).toList();
     }
 
-    // Category
-    if (state.value?.selectedCategory != 'All') {
+    // Apply category filter
+    final selectedCategory = current.selectedCategory;
+    if (selectedCategory != 'All') {
       filtered = filtered
-          .where((tx) => tx.category == state.value?.selectedCategory)
+          .where((tx) => tx.category == selectedCategory)
           .toList();
     }
 
-    // Type
-    if (state.value?.selectedType != null) {
-      filtered = filtered
-          .where((tx) => tx.type == state.value?.selectedType)
-          .toList();
+    // Apply type filter
+    final selectedType = current.selectedType;
+    if (selectedType != null && selectedType != TransactionModelType.All) {
+      filtered = filtered.where((tx) => tx.type == selectedType).toList();
     }
 
-    // Date Range
-    if (state.value != null && state.value?.selectedDateRange != null) {
+    // Apply date range filter
+    final dateRange = current.selectedDateRange;
+    if (dateRange != null) {
+      // Normalize dates to start and end of day for proper comparison
+      final startDate = DateTime(
+        dateRange.start.year,
+        dateRange.start.month,
+        dateRange.start.day,
+      );
+      final endDate = DateTime(
+        dateRange.end.year,
+        dateRange.end.month,
+        dateRange.end.day,
+        23,
+        59,
+        59,
+      );
+
       filtered = filtered.where((tx) {
-        return tx.date.isAfter(
-              state.value!.selectedDateRange!.start.subtract(Duration(days: 1)),
-            ) &&
-            tx.date.isBefore(
-              state.value!.selectedDateRange!.end.add(Duration(days: 1)),
-            );
+        return tx.date.isAfter(startDate.subtract(Duration(milliseconds: 1))) &&
+            tx.date.isBefore(endDate.add(Duration(milliseconds: 1)));
       }).toList();
     }
 

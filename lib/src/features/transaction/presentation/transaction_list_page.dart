@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:paywize/src/common/utils/slide_animation.dart';
 import 'package:paywize/src/features/transaction/data/models/transaction_model.dart';
 import 'package:paywize/src/features/transaction/data/models/transaction_state.dart';
+import 'package:paywize/src/features/transaction/presentation/widgets/custom_dateranger_picker.dart';
 import 'package:paywize/src/features/transaction/presentation/widgets/transaction_card.dart';
 import 'package:paywize/src/features/transaction/presentation/widgets/transaction_filter_chip.dart';
 import 'package:paywize/src/features/transaction/provider/transaction_list_provider.dart';
@@ -14,9 +15,17 @@ class TransactionListPage extends ConsumerStatefulWidget {
   _TransactionDashboardState createState() => _TransactionDashboardState();
 }
 
-class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
+class _TransactionDashboardState extends ConsumerState<TransactionListPage>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
+  late AnimationController _summaryAnimationController;
+  late Animation<double> _summaryHeightAnimation;
+  late Animation<double> _summaryOpacityAnimation;
 
+  bool _isSummaryVisible = true;
+
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _filterScrollController = ScrollController();
   // Mock categories for filtering
   final List<String> _categories = [
     'All',
@@ -30,19 +39,88 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    _summaryAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _summaryHeightAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _summaryAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    _summaryOpacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _summaryAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Add scroll listener
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    _filterScrollController.dispose();
+    _summaryAnimationController.dispose();
     super.dispose();
   }
 
+  void _onScroll() {
+    final currentOffset = _scrollController.offset;
+
+    // Show summary cards only when at the very top (offset <= 5 for small tolerance)
+    const topThreshold = 5.0;
+
+    if (currentOffset <= topThreshold) {
+      // At the top - show summary cards
+      if (!_isSummaryVisible) {
+        setState(() {
+          _isSummaryVisible = true;
+        });
+        _summaryAnimationController.reverse();
+      }
+    } else {
+      // Not at the top - hide summary cards
+      if (_isSummaryVisible) {
+        setState(() {
+          _isSummaryVisible = false;
+        });
+        _summaryAnimationController.forward();
+      }
+    }
+  }
+
+  void scrollToFront() {
+    _filterScrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   Future<void> _selectDateRange(DateTimeRange? selectedDateRange) async {
-    final DateTimeRange? picked = await showDateRangePicker(
+    // final DateTimeRange? picked = await showDateRangePicker(
+    //   context: context,
+    //   firstDate: DateTime.now().subtract(Duration(days: 365)),
+    //   lastDate: DateTime.now(),
+    //   initialDateRange: selectedDateRange,
+    // );
+    final DateTimeRange? picked = await _showCustomDateRangePicker(
       context: context,
       firstDate: DateTime.now().subtract(Duration(days: 365)),
       lastDate: DateTime.now(),
       initialDateRange: selectedDateRange,
     );
-
     if (picked != null) {
       ref.read(transactionListProvider.notifier).setDateRange(picked);
     }
@@ -58,6 +136,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
               onPressed: () {
                 _searchController.clear();
                 ref.read(transactionListProvider.notifier).search('');
+                ref.read(transactionListProvider.notifier).clearFilters();
               },
             )
           : null,
@@ -144,48 +223,68 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
                     child: Column(
                       children: [
                         // Summary Cards
-                        SlideAnimation(
-                          child: Container(
-                            padding: EdgeInsets.all(24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Financial Overview',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2D3748),
+                        AnimatedBuilder(
+                          animation: _summaryAnimationController,
+                          builder: (context, child) {
+                            return SizeTransition(
+                              sizeFactor: _summaryHeightAnimation,
+                              axisAlignment: 1.0,
+                              child: FadeTransition(
+                                opacity: _summaryOpacityAnimation,
+                                child: SlideAnimation(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                      top: 24,
+                                      right: 24,
+                                      left: 24,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Financial Overview',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF2D3748),
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            _buildSummaryCard(
+                                              'Balance',
+                                              transactionListNotifier
+                                                  .totalBalance,
+                                              Icons.account_balance,
+                                              Color(0xFF667eea),
+                                            ),
+                                            SizedBox(width: 12),
+                                            _buildSummaryCard(
+                                              'Income',
+                                              transactionListNotifier
+                                                  .totalIncome,
+                                              Icons.trending_up,
+                                              Color(0xFF10B981),
+                                            ),
+                                            SizedBox(width: 12),
+                                            _buildSummaryCard(
+                                              'Expenses',
+                                              transactionListNotifier
+                                                  .totalExpenses,
+                                              Icons.trending_down,
+                                              Color(0xFFEF4444),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: 16),
-                                Row(
-                                  children: [
-                                    _buildSummaryCard(
-                                      'Balance',
-                                      transactionListNotifier.totalBalance,
-                                      Icons.account_balance,
-                                      Color(0xFF667eea),
-                                    ),
-                                    SizedBox(width: 12),
-                                    _buildSummaryCard(
-                                      'Income',
-                                      transactionListNotifier.totalIncome,
-                                      Icons.trending_up,
-                                      Color(0xFF10B981),
-                                    ),
-                                    SizedBox(width: 12),
-                                    _buildSummaryCard(
-                                      'Expenses',
-                                      transactionListNotifier.totalExpenses,
-                                      Icons.trending_down,
-                                      Color(0xFFEF4444),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         ),
 
                         // Filters Section
@@ -195,6 +294,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height: 16),
                                 // Search & Filter test
                                 Text(
                                   'Search & Filter',
@@ -223,6 +323,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
 
                                 // Filter Chips
                                 SingleChildScrollView(
+                                  controller: _filterScrollController,
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     spacing: 8,
@@ -269,6 +370,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
                                           _searchController.clear();
                                           transactionListNotifier
                                               .clearFilters();
+                                          scrollToFront();
                                         },
                                         isAction: true,
                                       ),
@@ -316,6 +418,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
                                         ref.invalidate(transactionListProvider),
                                     color: Color(0xFF667eea),
                                     child: ListView.builder(
+                                      controller: _scrollController,
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 24,
                                       ),
@@ -413,39 +516,162 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(28.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Select Category',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2D3748),
-                  ),
-                ),
-                SizedBox(height: 20),
-                ..._categories.map((category) {
-                  return ListTile(
-                    title: Text(category),
-                    leading: Radio<String>(
-                      value: category,
-                      groupValue: transactionListValue?.selectedCategory,
-                      onChanged: (value) {
-                        transactionListNotifier.setCategory(value ?? '');
-                        Navigator.pop(context);
-                      },
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.8,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.white, Colors.purple.shade50],
+            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.purple.withOpacity(0.1),
+                blurRadius: 20,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(28.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Handle bar
+                  Container(
+                    width: 50,
+                    height: 5,
+                    margin: EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade300,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  );
-                }),
-              ],
+                  ),
+                  // Title with icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.purple.shade100,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.category_outlined,
+                          color: Colors.purple.shade700,
+                          size: 20,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        'Select Category',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple.shade800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 25),
+                  // Categories list
+                  ..._categories.map((category) {
+                    bool isSelected =
+                        transactionListValue?.selectedCategory == category;
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Colors.purple.shade50
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: isSelected
+                              ? Colors.purple.shade300
+                              : Colors.grey.shade200,
+                          width: isSelected ? 2 : 1,
+                        ),
+                        boxShadow: [
+                          if (isSelected)
+                            BoxShadow(
+                              color: Colors.purple.withOpacity(0.1),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                        ],
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        title: Text(
+                          category,
+                          style: TextStyle(
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.purple.shade800
+                                : Colors.grey.shade700,
+                            fontSize: 16,
+                          ),
+                        ),
+                        onTap: () {
+                          transactionListNotifier.setCategory(category);
+                          Navigator.pop(context);
+                        },
+                        leading: Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? Colors.purple.shade600
+                                  : Colors.grey.shade400,
+                              width: 2,
+                            ),
+                            color: isSelected
+                                ? Colors.purple.shade600
+                                : Colors.transparent,
+                          ),
+                          child: isSelected
+                              ? Icon(Icons.check, size: 14, color: Colors.white)
+                              : null,
+                        ),
+                        trailing: isSelected
+                            ? Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.purple.shade600,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  'Selected',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                            : null,
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         );
@@ -459,61 +685,307 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage> {
   ) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Select Type',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2D3748),
-                ),
-              ),
-              SizedBox(height: 20),
-              ListTile(
-                title: Text('All Types'),
-                leading: Radio<TransactionModelType?>(
-                  value: null,
-                  groupValue: transactionListValue?.selectedType,
-                  onChanged: (value) {
-                    transactionListNotifier.setType(value);
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              ListTile(
-                title: Text('Income'),
-                leading: Radio<TransactionModelType?>(
-                  value: TransactionModelType.income,
-                  groupValue: transactionListValue?.selectedType,
-                  onChanged: (value) {
-                    transactionListNotifier.setType(value);
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              ListTile(
-                title: Text('Expense'),
-                leading: Radio<TransactionModelType?>(
-                  value: TransactionModelType.expense,
-                  groupValue: transactionListValue?.selectedType,
-                  onChanged: (value) {
-                    transactionListNotifier.setType(value);
-                    Navigator.pop(context);
-                  },
-                ),
+          height: MediaQuery.of(context).size.height * 0.7,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.white, Colors.purple.shade50],
+            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.purple.withOpacity(0.1),
+                blurRadius: 20,
+                spreadRadius: 5,
               ),
             ],
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(28),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Handle bar
+                  Container(
+                    width: 50,
+                    height: 5,
+                    margin: EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade300,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  // Title with icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.purple.shade100,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.swap_vert,
+                          color: Colors.purple.shade700,
+                          size: 20,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        'Select Type',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple.shade800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 25),
+                  // Type options
+                  _buildTypeOption(
+                    'All Types',
+                    Icons.list_alt,
+                    TransactionModelType.All,
+                    transactionListValue?.selectedType,
+                    transactionListNotifier,
+                    context,
+                  ),
+                  SizedBox(height: 12),
+                  _buildTypeOption(
+                    'Income',
+                    Icons.trending_up,
+                    TransactionModelType.Income,
+                    transactionListValue?.selectedType,
+                    transactionListNotifier,
+                    context,
+                  ),
+                  SizedBox(height: 12),
+                  _buildTypeOption(
+                    'Expense',
+                    Icons.trending_down,
+                    TransactionModelType.Expense,
+                    transactionListValue?.selectedType,
+                    transactionListNotifier,
+                    context,
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
           ),
         );
       },
     );
   }
+
+  Widget _buildTypeOption(
+    String title,
+    IconData icon,
+    TransactionModelType? value,
+    TransactionModelType? groupValue,
+    TransactionList transactionListNotifier,
+    BuildContext context,
+  ) {
+    bool isSelected = groupValue == value;
+    Color typeColor = _getTypeColor(value);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.purple.shade50 : Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: isSelected ? Colors.purple.shade300 : Colors.grey.shade200,
+          width: isSelected ? 2 : 1,
+        ),
+        boxShadow: [
+          if (isSelected)
+            BoxShadow(
+              color: Colors.purple.withOpacity(0.1),
+              blurRadius: 8,
+              spreadRadius: 1,
+            ),
+        ],
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        onTap: () {
+          transactionListNotifier.setType(value);
+          Navigator.pop(context);
+        },
+        leading: Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: typeColor.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: typeColor, size: 20),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            color: isSelected ? Colors.purple.shade800 : Colors.grey.shade700,
+            fontSize: 16,
+          ),
+        ),
+        trailing: Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: isSelected ? Colors.purple.shade600 : Colors.grey.shade400,
+              width: 2,
+            ),
+            color: isSelected ? Colors.purple.shade600 : Colors.transparent,
+          ),
+          child: isSelected
+              ? Icon(Icons.check, size: 14, color: Colors.white)
+              : null,
+        ),
+      ),
+    );
+  }
+
+  Color _getTypeColor(TransactionModelType? type) {
+    switch (type) {
+      case TransactionModelType.Income:
+        return Colors.green.shade600;
+      case TransactionModelType.Expense:
+        return Colors.red.shade600;
+      default:
+        return Colors.purple.shade600;
+    }
+  }
+
+  Future<DateTimeRange?> _showCustomDateRangePicker({
+    required BuildContext context,
+    required DateTime firstDate,
+    required DateTime lastDate,
+    DateTimeRange? initialDateRange,
+  }) async {
+    return await showModalBottomSheet<DateTimeRange>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CustomDateRangePicker(
+        firstDate: firstDate,
+        lastDate: lastDate,
+        initialDateRange: initialDateRange,
+      ),
+    );
+  }
+
+  // void _showCategoryFilter(
+  //   TransactionState? transactionListValue,
+  //   TransactionList transactionListNotifier,
+  // ) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: const EdgeInsets.all(28.0),
+  //         child: SingleChildScrollView(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text(
+  //                 'Select Category',
+  //                 style: TextStyle(
+  //                   fontSize: 18,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Color(0xFF2D3748),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 20),
+  //               ..._categories.map((category) {
+  //                 return ListTile(
+  //                   title: Text(category),
+  //                   leading: Radio<String>(
+  //                     value: category,
+  //                     groupValue: transactionListValue?.selectedCategory,
+  //                     onChanged: (value) {
+  //                       transactionListNotifier.setCategory(value ?? '');
+  //                       Navigator.pop(context);
+  //                     },
+  //                   ),
+  //                 );
+  //               }),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // void _showTypeFilter(
+  //   TransactionState? transactionListValue,
+  //   TransactionList transactionListNotifier,
+  // ) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return Container(
+  //         padding: EdgeInsets.all(20),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Text(
+  //               'Select Type',
+  //               style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Color(0xFF2D3748),
+  //               ),
+  //             ),
+  //             SizedBox(height: 20),
+  //             ListTile(
+  //               title: Text('All Types'),
+  //               leading: Radio<TransactionModelType?>(
+  //                 value: null,
+  //                 groupValue: transactionListValue?.selectedType,
+  //                 onChanged: (value) {
+  //                   transactionListNotifier.setType(value);
+  //                   Navigator.pop(context);
+  //                 },
+  //               ),
+  //             ),
+  //             ListTile(
+  //               title: Text('Income'),
+  //               leading: Radio<TransactionModelType?>(
+  //                 value: TransactionModelType.Income,
+  //                 groupValue: transactionListValue?.selectedType,
+  //                 onChanged: (value) {
+  //                   transactionListNotifier.setType(value);
+  //                   Navigator.pop(context);
+  //                 },
+  //               ),
+  //             ),
+  //             ListTile(
+  //               title: Text('Expense'),
+  //               leading: Radio<TransactionModelType?>(
+  //                 value: TransactionModelType.Expense,
+  //                 groupValue: transactionListValue?.selectedType,
+  //                 onChanged: (value) {
+  //                   transactionListNotifier.setType(value);
+  //                   Navigator.pop(context);
+  //                 },
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
