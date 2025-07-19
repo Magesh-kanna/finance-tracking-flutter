@@ -99,7 +99,7 @@ class TransactionList extends _$TransactionList {
     List<TransactionModel> filtered = current.allTransactions ?? [];
 
     // Search
-    final query = current.searchQuery.toLowerCase() ?? '';
+    final query = current.searchQuery.toLowerCase();
     if (query != '') {
       filtered = filtered.where((tx) {
         return tx.title.toLowerCase().contains(query) ||

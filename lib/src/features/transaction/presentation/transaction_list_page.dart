@@ -547,7 +547,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                     height: 5,
                     margin: EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      color: Colors.purple.shade300,
+                      color: Color(0xFF667eea),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -558,12 +558,12 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                       Container(
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.purple.shade100,
+                          color: Color(0x0F667eea),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           Icons.category_outlined,
-                          color: Colors.purple.shade700,
+                          color: Color(0xFF667eea),
                           size: 20,
                         ),
                       ),
@@ -573,7 +573,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade800,
+                          color: Color(0xFF667eea),
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -587,20 +587,18 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                     return Container(
                       margin: EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.purple.shade50
-                            : Colors.white,
+                        color: isSelected ? Color(0x0F667eea) : Colors.white,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                           color: isSelected
-                              ? Colors.purple.shade300
+                              ? Color(0xFF667eea)
                               : Colors.grey.shade200,
                           width: isSelected ? 2 : 1,
                         ),
                         boxShadow: [
                           if (isSelected)
                             BoxShadow(
-                              color: Colors.purple.withOpacity(0.1),
+                              color: Color(0xFF667eea).withOpacity(0.1),
                               blurRadius: 8,
                               spreadRadius: 1,
                             ),
@@ -618,7 +616,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                                 ? FontWeight.w600
                                 : FontWeight.w500,
                             color: isSelected
-                                ? Colors.purple.shade800
+                                ? Color(0xFF667eea).withOpacity(0.9)
                                 : Colors.grey.shade700,
                             fontSize: 16,
                           ),
@@ -634,12 +632,12 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: isSelected
-                                  ? Colors.purple.shade600
+                                  ? Color(0xFF667eea)
                                   : Colors.grey.shade400,
                               width: 2,
                             ),
                             color: isSelected
-                                ? Colors.purple.shade600
+                                ? Color(0xFF667eea)
                                 : Colors.transparent,
                           ),
                           child: isSelected
@@ -653,7 +651,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.purple.shade600,
+                                  color: Color(0xFF667eea).withOpacity(0.9),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
@@ -716,7 +714,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                     height: 5,
                     margin: EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      color: Colors.purple.shade300,
+                      color: Color(0xFF667eea),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -727,12 +725,12 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                       Container(
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.purple.shade100,
+                          color: Color(0x0F667eea),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           Icons.swap_vert,
-                          color: Colors.purple.shade700,
+                          color: Color(0xFF667eea),
                           size: 20,
                         ),
                       ),
@@ -742,7 +740,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.purple.shade800,
+                          color: Color(0xFF667eea),
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -799,16 +797,16 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
 
     return Container(
       decoration: BoxDecoration(
-        color: isSelected ? Colors.purple.shade50 : Colors.white,
+        color: isSelected ? Color(0xFF667eea).withOpacity(0.1) : Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: isSelected ? Colors.purple.shade300 : Colors.grey.shade200,
+          color: isSelected ? Color(0xFF667eea) : Colors.grey.shade200,
           width: isSelected ? 2 : 1,
         ),
         boxShadow: [
           if (isSelected)
             BoxShadow(
-              color: Colors.purple.withOpacity(0.1),
+              color: Color(0xFF667eea).withOpacity(0.1),
               blurRadius: 8,
               spreadRadius: 1,
             ),
@@ -832,7 +830,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
           title,
           style: TextStyle(
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            color: isSelected ? Colors.purple.shade800 : Colors.grey.shade700,
+            color: isSelected ? Color(0xFF667eea) : Colors.grey.shade700,
             fontSize: 16,
           ),
         ),
@@ -842,10 +840,10 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: isSelected ? Colors.purple.shade600 : Colors.grey.shade400,
+              color: isSelected ? Color(0xFF667eea) : Colors.grey.shade400,
               width: 2,
             ),
-            color: isSelected ? Colors.purple.shade600 : Colors.transparent,
+            color: isSelected ? Color(0xFF667eea) : Colors.transparent,
           ),
           child: isSelected
               ? Icon(Icons.check, size: 14, color: Colors.white)
@@ -862,7 +860,7 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
       case TransactionModelType.Expense:
         return Colors.red.shade600;
       default:
-        return Colors.purple.shade600;
+        return Color(0xFF667eea);
     }
   }
 
@@ -883,109 +881,4 @@ class _TransactionDashboardState extends ConsumerState<TransactionListPage>
       ),
     );
   }
-
-  // void _showCategoryFilter(
-  //   TransactionState? transactionListValue,
-  //   TransactionList transactionListNotifier,
-  // ) {
-  //   showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     context: context,
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: const EdgeInsets.all(28.0),
-  //         child: SingleChildScrollView(
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Text(
-  //                 'Select Category',
-  //                 style: TextStyle(
-  //                   fontSize: 18,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: Color(0xFF2D3748),
-  //                 ),
-  //               ),
-  //               SizedBox(height: 20),
-  //               ..._categories.map((category) {
-  //                 return ListTile(
-  //                   title: Text(category),
-  //                   leading: Radio<String>(
-  //                     value: category,
-  //                     groupValue: transactionListValue?.selectedCategory,
-  //                     onChanged: (value) {
-  //                       transactionListNotifier.setCategory(value ?? '');
-  //                       Navigator.pop(context);
-  //                     },
-  //                   ),
-  //                 );
-  //               }),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-  //
-  // void _showTypeFilter(
-  //   TransactionState? transactionListValue,
-  //   TransactionList transactionListNotifier,
-  // ) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (context) {
-  //       return Container(
-  //         padding: EdgeInsets.all(20),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             Text(
-  //               'Select Type',
-  //               style: TextStyle(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Color(0xFF2D3748),
-  //               ),
-  //             ),
-  //             SizedBox(height: 20),
-  //             ListTile(
-  //               title: Text('All Types'),
-  //               leading: Radio<TransactionModelType?>(
-  //                 value: null,
-  //                 groupValue: transactionListValue?.selectedType,
-  //                 onChanged: (value) {
-  //                   transactionListNotifier.setType(value);
-  //                   Navigator.pop(context);
-  //                 },
-  //               ),
-  //             ),
-  //             ListTile(
-  //               title: Text('Income'),
-  //               leading: Radio<TransactionModelType?>(
-  //                 value: TransactionModelType.Income,
-  //                 groupValue: transactionListValue?.selectedType,
-  //                 onChanged: (value) {
-  //                   transactionListNotifier.setType(value);
-  //                   Navigator.pop(context);
-  //                 },
-  //               ),
-  //             ),
-  //             ListTile(
-  //               title: Text('Expense'),
-  //               leading: Radio<TransactionModelType?>(
-  //                 value: TransactionModelType.Expense,
-  //                 groupValue: transactionListValue?.selectedType,
-  //                 onChanged: (value) {
-  //                   transactionListNotifier.setType(value);
-  //                   Navigator.pop(context);
-  //                 },
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 }

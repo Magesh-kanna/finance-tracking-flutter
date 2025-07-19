@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paywize/src/common/utils/date_time_helpers.dart';
 
 class CustomDateRangePicker extends StatefulWidget {
   final DateTime firstDate;
@@ -113,7 +114,10 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 ),
                 if (_startDate != null || _endDate != null)
                   Text(
-                    _getSelectedRangeText(),
+                    getSelectedRangeText(
+                      startDate: _startDate,
+                      endDate: _endDate,
+                    ),
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFF667eea),
@@ -136,12 +140,12 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16),
         children: [
-          _buildQuickOption('Today', _getTodayRange()),
-          _buildQuickOption('This Week', _getThisWeekRange()),
-          _buildQuickOption('This Month', _getThisMonthRange()),
-          _buildQuickOption('Last 7 Days', _getLast7DaysRange()),
-          _buildQuickOption('Last 30 Days', _getLast30DaysRange()),
-          _buildQuickOption('Last 3 Months', _getLast3MonthsRange()),
+          _buildQuickOption('Today', getTodayRange()),
+          _buildQuickOption('This Week', getThisWeekRange()),
+          _buildQuickOption('This Month', getThisMonthRange()),
+          _buildQuickOption('Last 7 Days', getLast7DaysRange()),
+          _buildQuickOption('Last 30 Days', getLast30DaysRange()),
+          _buildQuickOption('Last 3 Months', getLast3MonthsRange()),
         ],
       ),
     );
@@ -185,7 +189,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                _getQuickOptionIcon(title),
+                getQuickOptionIcon(title),
                 color: isSelected ? Colors.white : Color(0xFF667eea),
                 size: 24,
               ),
@@ -201,7 +205,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
               ),
               SizedBox(height: 4),
               Text(
-                _formatQuickRange(range),
+                formatQuickRange(range),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 10,
@@ -229,43 +233,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
           ),
         ],
       ),
-      // child: ClipRRect(
-      //   borderRadius: BorderRadius.circular(20),
-      //   child: Theme(
-      //     data: Theme.of(context).copyWith(
-      //       colorScheme: ColorScheme.light(
-      //         primary: Color(0xFF667eea),
-      //         onPrimary: Colors.black,
-      //         surface: Colors.white,
-      //         onSurface: Color(0xFF667eea),
-      //       ),
-      //       textButtonTheme: TextButtonThemeData(
-      //         style: TextButton.styleFrom(foregroundColor: Color(0xFF667eea)),
-      //       ),
-      //     ),
-      //     child: CalendarDatePicker(
-      //       initialDate: _startDate ?? DateTime.now(),
-      //       firstDate: widget.firstDate,
-      //       lastDate: widget.lastDate,
-      //       onDateChanged: (date) {
-      //         setState(() {
-      //           if (_startDate == null ||
-      //               (_startDate != null && _endDate != null)) {
-      //             _startDate = date;
-      //             _endDate = null;
-      //           } else if (_endDate == null) {
-      //             if (date.isBefore(_startDate!)) {
-      //               _endDate = _startDate;
-      //               _startDate = date;
-      //             } else {
-      //               _endDate = date;
-      //             }
-      //           }
-      //         });
-      //       },
-      //     ),
-      //   ),
-      // ),
       child: _buildCustomCalendar(),
     );
   }
@@ -436,7 +403,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       child: Container(
         margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: _getDayCellColor(isStartDate, isEndDate, isInRange, isToday),
+          color: getDayCellColor(isStartDate, isEndDate, isInRange, isToday),
           borderRadius: BorderRadius.circular(8),
           border: isToday && !isStartDate && !isEndDate
               ? Border.all(color: Color(0xFF667eea), width: 1.5)
@@ -463,22 +430,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
         ),
       ),
     );
-  }
-
-  Color _getDayCellColor(
-    bool isStartDate,
-    bool isEndDate,
-    bool isInRange,
-    bool isToday,
-  ) {
-    if (isStartDate || isEndDate) {
-      return Color(0xFF667eea);
-    } else if (isInRange) {
-      return Color(0xFF667eea).withOpacity(0.2);
-    } else if (isToday) {
-      return Colors.transparent;
-    }
-    return Colors.transparent;
   }
 
   Color _getDayTextColor(
@@ -570,104 +521,6 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
           ),
         ],
       ),
-    );
-  }
-
-  String _getSelectedRangeText() {
-    if (_startDate != null && _endDate != null) {
-      return '${_formatDate(_startDate!)} - ${_formatDate(_endDate!)}';
-    } else if (_startDate != null) {
-      return 'From ${_formatDate(_startDate!)}';
-    }
-    return '';
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
-  }
-
-  String _formatQuickRange(DateTimeRange range) {
-    return '${range.start.day}/${range.start.month} - ${range.end.day}/${range.end.month}';
-  }
-
-  IconData _getQuickOptionIcon(String title) {
-    switch (title) {
-      case 'Today':
-        return Icons.today;
-      case 'This Week':
-        return Icons.view_week;
-      case 'This Month':
-        return Icons.calendar_view_month;
-      case 'Last 7 Days':
-        return Icons.date_range;
-      case 'Last 30 Days':
-        return Icons.calendar_month;
-      case 'Last 3 Months':
-        return Icons.calendar_view_week;
-      default:
-        return Icons.date_range;
-    }
-  }
-
-  DateTimeRange _getTodayRange() {
-    final today = DateTime.now();
-    return DateTimeRange(
-      start: DateTime(today.year, today.month, today.day),
-      end: DateTime(today.year, today.month, today.day, 23, 59, 59),
-    );
-  }
-
-  DateTimeRange _getThisWeekRange() {
-    final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = startOfWeek.add(Duration(days: 6));
-    return DateTimeRange(
-      start: DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day),
-      end: DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59),
-    );
-  }
-
-  DateTimeRange _getThisMonthRange() {
-    final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
-    final endOfMonth = DateTime(now.year, now.month + 1, 0);
-    return DateTimeRange(
-      start: startOfMonth,
-      end: DateTime(
-        endOfMonth.year,
-        endOfMonth.month,
-        endOfMonth.day,
-        23,
-        59,
-        59,
-      ),
-    );
-  }
-
-  DateTimeRange _getLast7DaysRange() {
-    final now = DateTime.now();
-    final start = now.subtract(Duration(days: 6));
-    return DateTimeRange(
-      start: DateTime(start.year, start.month, start.day),
-      end: DateTime(now.year, now.month, now.day, 23, 59, 59),
-    );
-  }
-
-  DateTimeRange _getLast30DaysRange() {
-    final now = DateTime.now();
-    final start = now.subtract(Duration(days: 29));
-    return DateTimeRange(
-      start: DateTime(start.year, start.month, start.day),
-      end: DateTime(now.year, now.month, now.day, 23, 59, 59),
-    );
-  }
-
-  DateTimeRange _getLast3MonthsRange() {
-    final now = DateTime.now();
-    final start = DateTime(now.year, now.month - 3, now.day);
-    return DateTimeRange(
-      start: start,
-      end: DateTime(now.year, now.month, now.day, 23, 59, 59),
     );
   }
 }
