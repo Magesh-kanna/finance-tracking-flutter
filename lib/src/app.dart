@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paywize/src/features/homepage/presentation/homepage.dart';
 
-class PaywizeApp extends StatelessWidget {
-  const PaywizeApp({super.key});
+class FinanceApp extends StatelessWidget {
+  const FinanceApp({super.key});
 
   @override
   Widget build(BuildContext context) {

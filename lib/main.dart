@@ -8,5 +8,5 @@ Future<void> main() async {
 
   /// start the db connection
   await PaywizeDB.database;
-  runApp(ProviderScope(child: const PaywizeApp()));
+  runApp(ProviderScope(child: const FinanceApp()));
 }
